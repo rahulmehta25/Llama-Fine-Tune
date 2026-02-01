@@ -1,0 +1,61 @@
+# Model outputs and checkpoints
+outputs/
+*.pt
+*.bin
+*.safetensors
+checkpoint-*/
+
+# Data files (keep structure, ignore content)
+data/*.jsonl
+data/*.json
+data/*.csv
+!data/.gitkeep
+!data/sample_data.jsonl
+
+# Logs and monitoring
+logs/
+wandb/
+runs/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Environment
+.env
+.env.local
+
+# Hugging Face
+.cache/
+huggingface_token.txt
+
+# Model cache (already cached centrally)
+models/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Config overrides (keep templates)
+config/*_override.yaml
+!config/*_template.yamlMiniconda3-latest-MacOSX-arm64.sh
+ml-training-env/

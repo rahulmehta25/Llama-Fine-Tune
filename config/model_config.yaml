@@ -1,0 +1,53 @@
+# Llama 3.1 8B Model Configuration
+# Optimized for M4 Max Apple Silicon
+
+# Base Model Settings
+base_model: "meta-llama/Llama-3.1-8B"
+model_type: "llama"
+tokenizer_name: "meta-llama/Llama-3.1-8B"
+
+# Model Architecture
+architecture:
+  hidden_size: 4096
+  intermediate_size: 11008
+  num_attention_heads: 32
+  num_hidden_layers: 32
+  num_key_value_heads: 8
+  rms_norm_eps: 1e-05
+  vocab_size: 128256
+
+# Tokenizer Configuration
+tokenizer:
+  padding_side: "right"
+  truncation_side: "right"
+  pad_token: "<|end_of_text|>"
+  eos_token: "<|end_of_text|>"
+  bos_token: "<|begin_of_text|>"
+  unk_token: "<|unk|>"
+  
+# Generation Parameters
+generation:
+  max_new_tokens: 512
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+  repetition_penalty: 1.1
+  do_sample: true
+  early_stopping: true
+
+# Quantization Settings (for inference)
+quantization:
+  load_in_8bit: false
+  load_in_4bit: true
+  bnb_4bit_compute_dtype: "bfloat16"
+  bnb_4bit_use_double_quant: true
+  bnb_4bit_quant_type: "nf4"
+
+# Apple Silicon Optimizations
+apple_silicon:
+  use_mps: true
+  mps_fallback_to_cpu: true
+  torch_dtype: "bfloat16"
+  device_map: "auto"
+
+

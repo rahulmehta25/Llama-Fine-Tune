@@ -1,0 +1,90 @@
+# Llama 3.1 8B Fine-Tuning Configuration for M4 Max
+# Optimized for Apple Silicon with 64GB RAM
+
+# Model Configuration
+model:
+  name: "meta-llama/Llama-3.1-8B"
+  max_length: 2048
+  use_cache: false
+
+# Tokenizer Configuration
+tokenizer:
+  padding_side: "right"
+  truncation: true
+  truncation_side: "right"
+  max_length: 2048
+
+# QLoRA Configuration (optimized for M4 Max)
+lora:
+  r: 16                    # Rank - good balance for 8B model
+  lora_alpha: 32           # Scaling factor
+  target_modules:          # Target attention modules
+    - "q_proj"
+    - "v_proj" 
+    - "k_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  lora_dropout: 0.1
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+# Training Arguments (optimized for M4 Max - user specifications)
+training:
+  per_device_train_batch_size: 4      # Adjust for your GPU memory
+  gradient_accumulation_steps: 4      # Effective batch size = 16
+  learning_rate: 2e-4
+  num_train_epochs: 3
+  max_steps: 1000                     # User specified
+  warmup_steps: 100
+  weight_decay: 0.01
+  lr_scheduler_type: "cosine"
+  
+  # Apple Silicon optimizations
+  bf16: false                        # BFloat16 not supported on MPS
+  dataloader_num_workers: 8          # Utilize CPU cores
+  gradient_checkpointing: true       # Save memory
+  fp16: false                        # fp16 not supported on MPS
+  
+  # Logging and saving
+  logging_steps: 10
+  save_steps: 500
+  eval_steps: 500
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  
+  # Output directory
+  output_dir: "./outputs"
+  logging_dir: "./logs"
+  
+  # Weights & Biases
+  report_to: "wandb"
+  run_name: "llama-3.1-8b-finetune"
+
+# Data Configuration
+data:
+  train_file: "data/train.jsonl"
+  eval_file: "data/eval.jsonl"
+  max_train_samples: null             # Use all available data
+  max_eval_samples: 1000             # Limit eval samples for speed
+  
+  # Data formatting
+  instruction_column: "instruction"
+  input_column: "input"
+  output_column: "output"
+
+# Hardware Configuration
+hardware:
+  device_map: "auto"
+  torch_dtype: "float16"             # Use float16 for MPS compatibility
+  use_mps: true                      # Use Metal Performance Shaders
+  max_memory: "60GB"                 # Leave some RAM for system
+
+# Evaluation Configuration
+evaluation:
+  eval_strategy: "steps"
+  eval_accumulation_steps: 1
+  per_device_eval_batch_size: 4
